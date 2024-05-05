@@ -35,32 +35,65 @@ class PlayList {
      *  If the list is full, does nothing and returns false.
      *  Otherwise, appends the track and returns true. */
     public boolean add(Track track) {
-        //// replace the following statement with your code
-        return true;
+        //IN PROGRESS
+        //find out if list is full
+        if(size < maxSize){
+            tracks[size] = track;
+            //forgot to adjust the size here initially 
+            //took forever to debug 
+            //mental note to self not to make that mistake again
+            size++;
+            return true; 
+        }
+        else{
+           return false;
+        }
     }
 
     /** Returns the data of this list, as a string. Each track appears in a separate line. */
     //// For an efficient implementation, use StringBuilder.
     public String toString() {
-        //// replace the following statement with your code
-        return "";
+        String asString = "\n";
+        //loops through playlist adds each track as string to global
+        for(int i = 0; i < size; i++){
+           String trackInfo = tracks[i].toString();
+           asString = asString + trackInfo + "\n";
+        }
+        return asString;
     }
 
     /** Removes the last track from this list. If the list is empty, does nothing. */
      public void removeLast() {
-        //// replace this comment with your code
+        if(size > 0){
+            //size-1 becaus if not then you would remove an empty track
+            tracks[size - 1] = null;
+            size--;
+        }
     }
     
     /** Returns the total duration (in seconds) of all the tracks in this list.*/
     public int totalDuration() {
-        //// replace the following statement with your code
-        return 0;
+        int totalCount = 0;
+        for(int i = 0; i < size; i++){
+            totalCount += tracks[i].getDuration();
+        }
+        return totalCount;
     }
 
     /** Returns the index of the track with the given title in this list.
      *  If such a track is not found, returns -1. */
     public int indexOf(String title) {
-        //// replace the following statement with your code
+        //loops through tracks
+        for(int i = 0; i < size; i++){
+            //assigns lower case title to string for comparison purposes
+            String currentTrack = tracks[i].getTitle().toLowerCase();
+            //checks if titel is the same
+            //uses string equator function 
+            if(currentTrack.equals(title.toLowerCase())){
+                //returns index of the title if the same
+                return i;
+            }
+        }
         return -1;
     }
 
@@ -71,27 +104,73 @@ class PlayList {
      *  is full, does nothing and returns false. Otherwise, inserts the track and
      *  returns true. */
     public boolean add(int i, Track track) {
-        //// replace the following statement with your code
-        return false;
+        if(i < 0 || i > size ||  maxSize == size){
+            return false;
+        }
+        else{
+            //decrement loop (doesnt require temp saver)
+            for (int j = size - 1; j >= i; j--) {
+                tracks[j + 1] = tracks[j];
+            }
+            tracks[i] = track;
+            size++;
+            return true;
+        }
     }
      
     /** Removes the track in the given index from this list.
      *  If the list is empty, or the given index is negative or too big for this list, 
      *  does nothing and returns -1. */
     public void remove(int i) {
-        //// replace this comment with your code
+       if(i >= 0 && i <= size){
+            for(int k = i; k < size; k++){
+                //does not require temp here because its an increment not decrement
+                //therefore no loss of information
+                tracks[k] = tracks[k+1];
+            }
+            size--;
+        }
     }
 
     /** Removes the first track that has the given title from this list.
      *  If such a track is not found, or the list is empty, or the given index
      *  is negative or too big for this list, does nothing. */
     public void remove(String title) {
-        //// replace this comment with your code
+        //for empty list
+        if(size == 0){
+            return;
+        }
+        //loops through checking all the tracks
+        //for same title name 
+        for(int i = 0; i < size; i++){
+            if(tracks[i].getTitle().equals(title)){
+                //if same title then we start to upend in nested loop the titles after it
+                for(int j = 0; j < size; j++){
+                    //same as before no need for temp here because info is not lost
+                    //if it were decrement we would need temp holder not to lose info
+                    tracks[j] = tracks[j + 1];
+                }
+                //now we remove desired track
+                tracks[size-1] = null;
+                size--;
+                return;
+            }
+        }
     }
 
     /** Removes the first track from this list. If the list is empty, does nothing. */
     public void removeFirst() {
-        //// replace this comment with your code
+        //can only be done on a nonempty list
+        if(size != 0){
+            for(int i = 0; i < size; i++){
+                tracks[i] = tracks[i+1];
+            }
+            tracks[size - 1] = null;
+            size--;
+        }
+        else{
+            return;
+        }
     }
     
     /** Adds all the tracks in the other list to the end of this list. 
